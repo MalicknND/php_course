@@ -1,33 +1,37 @@
-<!DOCTYPE html>
-<html>
+<?php
+// Définir le titre du blog
+$title = "Le blog de l'AVBN";
 
-<head>
-    <meta charset="utf-8" />
-    <title>Le blog de l'AVBN</title>
-    <link href="style.css" rel="stylesheet" />
-</head>
+// Démarrer la mise en tampon de sortie
+ob_start();
+?>
 
-<body>
-    <h1>Le super blog de l'AVBN !</h1>
-    <p>Derniers billets du blog :</p>
+<h1>Le super blog de l'AVBN !</h1>
+<p>Derniers billets du blog :</p>
 
-    <?php
-    foreach ($posts as $post) {
-    ?>
-        <div class="news">
-            <h3>
-                <?= htmlspecialchars($post['title']); ?>
+<?php
+// Parcourir chaque article et afficher ses informations
+foreach ($posts as $post) {
+?>
+    <div class="news">
+        <h3>
+            <?= htmlspecialchars($post['title']); ?>
+            <em>le <?= $post['french_creation_date']; ?></em>
+        </h3>
+        <p>
+            <?= nl2br(htmlspecialchars($post['content'])); ?>
+            <br />
+            <em><a href="post.php?id=<?= urlencode($post['identifier']) ?>">Commentaires</a></em>
+        </p>
+    </div>
+<?php
+}
+?>
 
-            </h3>
-            <p>
-                <?= nl2br(htmlspecialchars($post['content'])); ?>
-                <br />
-                <em><a href="post.php?id=<?= urlencode($post['identifier']) ?>">Commentaires</a></em>
-            </p>
-        </div>
-    <?php
-    }
-    ?>
-</body>
+<?php
+// Récupérer le contenu de la mise en tampon de sortie et le nettoyer
+$content = ob_get_clean();
 
-</html>
+// Inclure le fichier de mise en page
+require('layout.php');
+?>
